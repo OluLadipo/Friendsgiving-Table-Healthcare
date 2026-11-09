@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Friendsgiving Table</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Six healthcare AI tools RSVP'd. Decide who sits at the main table, the kids' table, or gets shown the door. By Olu Ladipo.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Who gets a seat at the table? An AI Friendsgiving">
+<meta property="og:description" content="Six healthcare AI tools RSVP'd. You're the host. Play in 1 minute.">
+<meta property="og:image" content="https://thanksgivinghealth.netlify.app/thumbnail.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+<meta name="twitter:card" content="summary_large_image">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,700;1,6..96,500&family=Pinyon+Script&family=Manrope:wght@400;600;700&display=swap">
+<style>
+/* Layout: a black-tie Friendsgiving. Sealed invitation opens into a navy dining room: three seating zones up top, one ivory place card at a time below, gold foil throughout. Single navy look by choice. */
+:root{
+  --navy:#0b1736; --navy-2:#13234d; --navy-3:#1c3166;
+  --ivory:#fbf7ef; --ivory-2:#efe7d6; --ink:#0b1736; --ink-soft:#4a5677;
+  --gold:#c9a24b; --gold-hi:#f1d58d; --pumpkin:#d9763a; --cranberry:#b03a52;
+  --white:#ffffff; --mist:rgba(255,255,255,.72); --hair:rgba(201,162,75,.35);
+  --display:"Bodoni Moda","Didot","Bodoni 72",Georgia,serif;
+  --script:"Pinyon Script","Snell Roundhand","Apple Chancery",cursive;
+  --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --foil:linear-gradient(115deg,#a9812f 0%,#f1d58d 38%,#c9a24b 55%,#f6e3a8 72%,#a9812f 100%);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--navy)}
+body{color:var(--white);font-family:var(--body);font-size:16px;line-height:1.5;
+  background:radial-gradient(90% 55% at 50% 0%,#203a78 0%,var(--navy) 70%) fixed}
+.wrap{max-width:640px;margin:0 auto;padding-block:22px 44px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:20px}
+h1,h2{font-family:var(--display);font-weight:500;margin:0;line-height:1.05;text-wrap:balance}
+p{margin:0}
+.foil{background:var(--foil);-webkit-background-clip:text;background-clip:text;color:transparent}
+.eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;font-weight:700;color:var(--gold)}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
+
+/* invitation */
+.invite{display:flex;flex-direction:column;align-items:center;gap:22px;padding-top:10px;text-align:center}
+.envelope{position:relative;width:min(340px,100%);aspect-ratio:1.45;max-width:100%;perspective:900px}
+.env-back{position:absolute;inset:0;background:var(--navy-3);border-radius:10px;box-shadow:0 24px 50px rgba(0,0,0,.5);border:1px solid var(--hair)}
+.letter{position:absolute;left:7%;right:7%;top:10%;bottom:8%;background:var(--ivory);color:var(--ink);border-radius:6px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px;transition:transform .8s cubic-bezier(.2,.8,.2,1) .35s;z-index:1}
+.letter .script{font-family:var(--script);font-size:clamp(30px,8vw,40px);color:var(--ink);line-height:1}
+.letter small{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-soft)}
+.env-front{position:absolute;inset:0;z-index:2;border-radius:10px;overflow:hidden;pointer-events:none}
+.env-front::before{content:"";position:absolute;inset:0;background:linear-gradient(to top right,var(--navy-2) 50%,transparent 50.4%) left/50.2% 100% no-repeat,linear-gradient(to top left,var(--navy-2) 50%,transparent 50.4%) right/50.2% 100% no-repeat}
+.flap{position:absolute;left:0;right:0;top:0;height:58%;z-index:3;transform-origin:top;transition:transform .7s ease,z-index 0s .35s}
+.flap::before{content:"";position:absolute;inset:0;background:var(--navy-3);clip-path:polygon(0 0,100% 0,50% 100%);border-top:1px solid var(--hair)}
+.seal{position:absolute;left:50%;top:58%;translate:-50% -50%;z-index:4;width:58px;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#d4566c,var(--cranberry) 60%,#7d2236);display:grid;place-items:center;
+  font-family:var(--display);font-style:italic;font-size:22px;color:var(--gold-hi);box-shadow:0 4px 12px rgba(0,0,0,.4);transition:opacity .3s,transform .3s}
+.envelope.open .seal{opacity:0;transform:scale(.6)}
+.envelope.open .flap{transform:rotateX(180deg);z-index:0}
+.envelope.open .letter{transform:translateY(-34%)}
+.invite h1{font-size:clamp(34px,9vw,50px)}
+.invite p{color:var(--mist);max-width:40ch}
+.btn{border:0;border-radius:999px;padding:14px 26px;font-weight:700;letter-spacing:.06em;color:var(--ink);background:var(--foil);background-size:200% 100%;
+  box-shadow:0 8px 22px rgba(201,162,75,.25);transition:background-position .5s,transform .15s}
+.btn:hover{background-position:100% 0;transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--gold-hi);border:1px solid var(--hair);box-shadow:none}
+
+/* dining room */
+.room{display:flex;flex-direction:column;gap:18px}
+.zones{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:10px}
+.zone{border:1px solid var(--hair);border-radius:16px;padding:12px 10px;display:flex;flex-direction:column;gap:8px;min-width:0;min-height:104px;background:rgba(255,255,255,.03)}
+.zone.main{border-radius:60px/40px;background:radial-gradient(ellipse at center,rgba(201,162,75,.12),transparent 70%)}
+.zone h3{margin:0;font-family:var(--display);font-weight:500;font-size:15px;text-align:center}
+.zone .sub{font-size:10px;letter-spacing:.2em;text-transform:uppercase;text-align:center;color:var(--mist)}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.chip{width:34px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-size:17px;background:var(--ivory);animation:land .5s cubic-bezier(.2,1.4,.4,1)}
+.zone.main .chip{box-shadow:0 0 0 2px var(--gold)}
+.zone.kids .chip{box-shadow:0 0 0 2px var(--pumpkin)}
+.zone.out .chip{box-shadow:0 0 0 2px var(--cranberry);filter:grayscale(.3)}
+@keyframes land{0%{transform:scale(0) translateY(-20px)}100%{transform:scale(1)}}
+@media (max-width:420px){.zones{grid-template-columns:1fr 1fr}.zone.main{grid-column:1/-1}}
+
+.progress{display:flex;gap:6px}
+.progress i{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.15)}
+.progress i.on{background:var(--foil)}
+
+.placecard{background:var(--ivory);color:var(--ink);border-radius:18px;padding:26px 22px 22px;position:relative;
+  box-shadow:0 30px 60px rgba(0,0,0,.45);display:flex;flex-direction:column;gap:14px;text-align:center;
+  animation:deal .55s cubic-bezier(.2,.9,.3,1)}
+.placecard::before{content:"";position:absolute;inset:8px;border:1px solid var(--gold);border-radius:12px;pointer-events:none}
+@keyframes deal{0%{opacity:0;transform:translateY(30px) rotate(-3deg) scale(.96)}100%{opacity:1;transform:none}}
+.placecard.to-main{animation:toMain .6s ease forwards}
+.placecard.to-kids{animation:toKids .6s ease forwards}
+.placecard.to-out{animation:toOut .6s ease forwards}
+@keyframes toMain{to{opacity:0;transform:translate(-30%,-60%) scale(.3) rotate(-8deg)}}
+@keyframes toKids{to{opacity:0;transform:translate(10%,-60%) scale(.3)}}
+@keyframes toOut{to{opacity:0;transform:translate(40%,-60%) scale(.3) rotate(10deg)}}
+.pc-top{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.pc-emoji{font-size:46px;line-height:1}
+.pc-name{font-family:var(--script);font-size:clamp(38px,10vw,50px);line-height:1;color:var(--ink)}
+.pc-desc{color:var(--ink-soft);max-width:34ch;margin:0 auto}
+.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
+.choice{border:1px solid var(--ivory-2);background:var(--white);border-radius:14px;padding:12px 6px;color:var(--ink);
+  display:flex;flex-direction:column;align-items:center;gap:4px;transition:transform .15s,border-color .15s,box-shadow .15s}
+.choice .e{font-size:24px}
+.choice b{font-size:13px}
+.choice small{font-size:11px;color:var(--ink-soft);line-height:1.25}
+.choice:hover{transform:translateY(-3px);box-shadow:0 10px 18px rgba(11,23,54,.12)}
+.choice[data-v="main"]:hover{border-color:var(--gold)}
+.choice[data-v="kids"]:hover{border-color:var(--pumpkin)}
+.choice[data-v="out"]:hover{border-color:var(--cranberry)}
+.quip{font-family:var(--display);font-style:italic;font-size:20px;text-align:center;min-height:1.6em;color:var(--gold-hi);transition:opacity .2s}
+
+/* result */
+.menu{background:var(--ivory);color:var(--ink);border-radius:20px;padding:30px 22px;position:relative;display:flex;flex-direction:column;gap:16px;text-align:center;box-shadow:0 30px 60px rgba(0,0,0,.45);animation:deal .6s ease}
+.menu::before{content:"";position:absolute;inset:9px;border:1px solid var(--gold);border-radius:14px;pointer-events:none}
+.menu::after{content:"";position:absolute;inset:14px;border:1px solid rgba(201,162,75,.4);border-radius:10px;pointer-events:none}
+.menu .eyebrow{color:var(--ink-soft)}
+.menu h2{font-size:clamp(32px,8vw,42px)}
+.menu .script{font-family:var(--script);font-size:30px;color:var(--cranberry);line-height:1.1}
+.menu .blurb{color:var(--ink-soft);max-width:40ch;margin:0 auto}
+.divider{display:flex;align-items:center;gap:10px;color:var(--gold);font-size:12px;letter-spacing:.3em;text-transform:uppercase}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--gold);opacity:.6}
+.courses{display:flex;flex-direction:column;text-align:left}
+.course{display:flex;gap:12px;align-items:flex-start;padding:12px 4px;border-bottom:1px dotted rgba(11,23,54,.2)}
+.course:last-child{border-bottom:0}
+.course .e{font-size:22px;line-height:1.3}
+.course .txt{min-width:0;flex:1}
+.course b{font-family:var(--display);font-weight:700;font-size:16px;display:block}
+.course span{font-size:13.5px;color:var(--ink-soft)}
+.badge{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;white-space:nowrap;padding:3px 8px;border-radius:999px;align-self:flex-start}
+.badge.same{background:rgba(201,162,75,.18);color:#7d5e17}
+.badge.diff{background:rgba(176,58,82,.12);color:var(--cranberry)}
+.rule{font-family:var(--display);font-style:italic;font-size:17px;color:var(--ink)}
+.actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;align-items:center}
+.menu .btn.ghost{color:var(--ink);border-color:rgba(11,23,54,.25)}
+.copied{font-size:13px;font-weight:700;color:#7d5e17}
+#share{width:100%;min-height:90px;background:var(--white);color:var(--ink);border:1px solid var(--ivory-2);border-radius:10px;padding:10px;font:inherit}
+canvas#leaves{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+
+footer{font-size:12.5px;color:var(--mist);display:flex;flex-direction:column;gap:4px;text-align:center;border-top:1px solid var(--hair);padding-top:14px}
+footer a{color:var(--gold-hi)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <section class="invite" id="invite">
+    <div class="eyebrow">Olu Ladipo requests your presence</div>
+    <div class="envelope" id="env">
+      <div class="env-back"></div>
+      <div class="letter"><small>An AI Friendsgiving</small><span class="script">You're the host</span><small>Seating begins now</small></div>
+      <div class="env-front"></div>
+      <div class="flap"></div>
+      <div class="seal" aria-hidden="true">O</div>
+    </div>
+    <h1>Who gets a seat at <span class="foil">the table?</span></h1>
+    <p>Six AI tools RSVP'd to healthcare Friendsgiving. Seat them at the main table, the kids' table, or show them the door.</p>
+    <p style="font-size:14px">Every guest is based on real work I see in healthcare operations.</p>
+    <button class="btn" id="open">Open the invitation</button>
+  </section>
+
+  <section class="room" id="room" hidden>
+    <div class="zones">
+      <div class="zone main"><h3>The Main Table</h3><div class="sub">AI runs it</div><div class="chips" id="z-main"></div></div>
+      <div class="zone kids"><h3>Kids' Table</h3><div class="sub">Human checks</div><div class="chips" id="z-kids"></div></div>
+      <div class="zone out"><h3>The Door</h3><div class="sub">People only</div><div class="chips" id="z-out"></div></div>
+    </div>
+    <div class="progress" id="progress" aria-hidden="true"></div>
+    <div id="stage" aria-live="polite"></div>
+    <div class="quip" id="quip"></div>
+  </section>
+
+  <section id="result" hidden></section>
+
+  <footer>
+    <span>Made by Olu Ladipo, AI UX &amp; Product Designer. My opinions, my side project, not an official UHG or Optum thing.</span>
+    <span><a href="https://www.linkedin.com/in/oluladipoinsights" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://oluladportfolio.netlify.app" target="_blank" rel="noopener">Portfolio</a> · <a href="https://referralrush-oluladipo.netlify.app" target="_blank" rel="noopener">Referral Rush</a></span>
+  </footer>
+</div>
+<canvas id="leaves" hidden></canvas>
+
+<script>
+const G=[
+ {e:"📝",n:"The Note Taker",d:"Writes the rep's notes after every member call.",mine:"main",
+  q:{main:"Finally, someone who does the dishes.",kids:"Fine, but you're proofreading.",out:"Enjoy retyping every call by hand."},
+  t:"Main table. Give reps their minutes back. Quick read, then save."},
+ {e:"🔎",n:"The Directory Checker",d:"Catches bad provider info before a member's referral goes out.",mine:"main",
+  q:{main:"The guest who knows that office closed in 2023.",kids:"Supervised fact-checking. Respect.",out:"Hope you love calling disconnected numbers."},
+  t:"Main table, best chair. Bad provider data is where referrals go to die."},
+ {e:"📅",n:"The Scheduling Bot",d:"Books member appointments at 11pm with zero hold music.",mine:"main",
+  q:{main:"No hold music? Pull up a chair.",kids:"Smart. Keep a human on speed dial.",out:"Hold music it is. Forever."},
+  t:"Main table, as long as there's an easy exit to a real person."},
+ {e:"📋",n:"The Prior Auth Decider",d:"Approves or denies prior auth requests by itself.",mine:"kids",
+  q:{main:"Bold. Somebody please check the oven.",kids:"It preps the plates. A clinician serves them.",out:"Strict. Nobody's getting denied by a robot tonight."},
+  t:"Kids' table. Let it pull the paperwork. A clinician makes the call, and every denial gets human eyes."},
+ {e:"💬",n:"The Crisis Line Answerer",d:"Picks up first when a member calls in crisis.",mine:"out",
+  q:{main:"Hmm. Some seats are for people only.",kids:"Close. I'd still want a human answering.",out:"Agreed. A real voice picks up first."},
+  t:"Not invited. Someone in crisis should hear a trained human first. AI can help behind the scenes."},
+ {e:"🎧",n:"The Call Copilot",d:"Whispers the next step to reps mid-call with a member.",mine:"kids",
+  q:{main:"Letting the GPS drive the car, I see.",kids:"Helpful sidekick. Rep stays in charge.",out:"Old school. The binder lives on."},
+  t:"Kids' table. Great backup on hard calls. The rep owns the call and can push back."}
+];
+const L={main:"Main Table",kids:"Kids' Table",out:"The Door"};
+const SC={main:2,kids:1,out:0};
+let picks=Array(G.length).fill(null), i=0, busy=false;
+const $=s=>document.querySelector(s);
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+$("#open").onclick=()=>{
+  $("#env").classList.add("open");
+  setTimeout(()=>{$("#invite").hidden=true;$("#room").hidden=false;start();window.scrollTo({top:0});},reduce?0:1300);
+};
+function start(){picks.fill(null);i=0;["main","kids","out"].forEach(k=>$("#z-"+k).innerHTML="");progress();card();}
+function progress(){$("#progress").innerHTML=G.map((g,k)=>`<i class="${k<i||picks[k]?"on":""}"></i>`).join("");}
+function card(){
+  const g=G[i];
+  $("#quip").textContent="";
+  $("#stage").innerHTML=`<article class="placecard" id="pc">
+    <div class="pc-top">Guest ${i+1} of ${G.length}</div>
+    <div class="pc-emoji" aria-hidden="true">${g.e}</div>
+    <h2 class="pc-name">${g.n}</h2>
+    <p class="pc-desc">${g.d}</p>
+    <div class="choices">
+      <button class="choice" data-v="main"><span class="e">🍗</span><b>Main Table</b><small>AI runs it</small></button>
+      <button class="choice" data-v="kids"><span class="e">🧃</span><b>Kids' Table</b><small>A human checks</small></button>
+      <button class="choice" data-v="out"><span class="e">🚪</span><b>The Door</b><small>People only</small></button>
+    </div></article>`;
+  $("#stage").querySelectorAll(".choice").forEach(b=>b.onclick=()=>pick(b.dataset.v));
+}
+function pick(v){
+  if(busy) return; busy=true;
+  picks[i]=v;
+  $("#pc").classList.add("to-"+v);
+  $("#quip").textContent="“"+G[i].q[v]+"”";
+  setTimeout(()=>{
+    const c=document.createElement("div");c.className="chip";c.textContent=G[i].e;c.title=G[i].n;$("#z-"+v).appendChild(c);
+    progress();
+  },reduce?0:450);
+  setTimeout(()=>{busy=false; if(i<G.length-1){i++;card();} else result();},reduce?600:1500);
+}
+function style(s){
+  if(s<=3) return ["The Bouncer","Clipboard out, velvet rope up. Nobody gets past you without a human chaperone."];
+  if(s<=6) return ["The Careful Cook","AI can help in the kitchen, but you're watching that oven all night."];
+  if(s<=9) return ["The Gravy Boat","Smooth balance. Busywork goes to AI, judgment calls stay with people."];
+  return ["The Open Buffet","Come one, come all. Just make sure somebody checks the turkey before it's served."];
+}
+function result(){
+  const s=picks.reduce((a,p)=>a+SC[p],0), same=picks.filter((p,k)=>p===G[k].mine).length, [name,blurb]=style(s);
+  $("#room").hidden=true;
+  const r=$("#result");
+  r.innerHTML=`<div class="menu">
+    <div class="eyebrow">Your hosting style</div>
+    <h2>${name}</h2>
+    <p class="blurb">${blurb}</p>
+    <div class="script">You matched Olu's seating chart ${same} of ${G.length}</div>
+    <div class="divider">Olu's seating chart</div>
+    <div class="courses">${G.map((g,k)=>`<div class="course"><span class="e">${g.e}</span><div class="txt"><b>${L[g.mine]} · ${g.n.replace("The ","")}</b><span>${g.t}</span></div>
+      <span class="badge ${picks[k]===g.mine?"same":"diff"}">${picks[k]===g.mine?"Same seat":"You: "+L[picks[k]]}</span></div>`).join("")}</div>
+    <div class="divider">House rule</div>
+    <p class="rule">AI gets a seat when it saves people time or catches mistakes early. Anything that decides someone's care keeps a human at the head of the table.</p>
+    <div class="actions"><button class="btn" id="copy">Copy my result</button><button class="btn ghost" id="again">Host again</button><span class="copied" id="copied" hidden>Copied</span></div>
+    <textarea id="share" readonly hidden aria-label="Your result"></textarea>
+  </div>`;
+  r.hidden=false;
+  const text=`I'm ${name} at the AI Friendsgiving Table 🦃 I matched Olu's seating chart ${same}/${G.length}. Where would you seat them?`;
+  $("#copy").onclick=()=>{
+    const ok=()=>{$("#copied").hidden=false}, fb=()=>{const t=$("#share");t.value=text;t.hidden=false;t.select();};
+    try{navigator.clipboard.writeText(text).then(ok,fb)}catch(e){fb()}
+  };
+  $("#again").onclick=()=>{r.hidden=true;$("#room").hidden=false;start();window.scrollTo({top:0,behavior:"smooth"})};
+  window.scrollTo({top:0,behavior:"smooth"});
+  leaves();
+}
+function leaves(){
+  if(reduce) return;
+  const cv=$("#leaves"), ctx=cv.getContext("2d"); cv.hidden=false;
+  const dpr=window.devicePixelRatio||1; cv.width=innerWidth*dpr; cv.height=innerHeight*dpr; ctx.scale(dpr,dpr);
+  const set=["🍂","🍁","✨","🥧"], ps=Array.from({length:46},()=>({x:Math.random()*innerWidth,y:-20-Math.random()*innerHeight*.6,
+    v:1.5+Math.random()*2.5,r:Math.random()*6.28,vr:(Math.random()-.5)*.08,s:16+Math.random()*14,e:set[Math.floor(Math.random()*set.length)],w:Math.random()*6.28}));
+  const t0=performance.now();
+  (function f(t){
+    ctx.clearRect(0,0,innerWidth,innerHeight);
+    ps.forEach(p=>{p.y+=p.v;p.w+=.03;p.x+=Math.sin(p.w)*.8;p.r+=p.vr;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.font=p.s+"px serif";ctx.fillText(p.e,0,0);ctx.restore();});
+    if(t-t0<4200) requestAnimationFrame(f); else {ctx.clearRect(0,0,innerWidth,innerHeight);cv.hidden=true;}
+  })(t0);
+}
+</script>
+
+</body>
+</html>
